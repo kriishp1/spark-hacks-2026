@@ -6,13 +6,41 @@ import Dashboard from './pages/Dashboard.jsx'
 import AboutUs from './pages/Aboutme.jsx'
 import ForgotPassword from './pages/ForgotPassword.jsx'
 import NewPassword from './pages/NewPassword.jsx'
-import {Routes, Route} from 'react-router-dom'
+import {Routes, Route, useNavigate} from 'react-router-dom'
 import { motion } from "motion/react"
 import InsertPage from './pages/InsertPage.jsx'
-import Wrapper from './pages/Wrapper.jsx';
+import Wrapper from './pages/Wrapper.jsx'
+import { useEffect } from 'react'
+import { supabase } from './supaBaseClient';
 
 
 function App() {
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data } = await supabase.auth.getSession();
+      // Only redirect to dashboard if user is on landing, login, or signup pages
+      const publicPages = ['/', '/login', '/signup', '/homepage'];
+      if (data.session && publicPages.includes(window.location.pathname)) {
+        navigate("/dashboard");
+      }
+    };
+
+    checkUser();
+
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      const publicPages = ['/', '/login', '/signup', '/homepage'];
+      if (session && publicPages.includes(window.location.pathname)) {
+        navigate("/dashboard");
+      }
+    });
+
+    return () => listener.subscription.unsubscribe();
+  }, [navigate]);
+
+
   return (
     <Routes>
       <Route path="/" element={<Landing />} />

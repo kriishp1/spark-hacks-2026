@@ -31,9 +31,18 @@ export default function SignUp() {
       console.error("Network error:", error);
       setMessage("Network error. Please try again.");
     }
-
-
   }
+
+  const handleGoogleSignUp = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google"
+    })
+
+    if (error) {
+      setMessage(error.message);
+    }
+  }
+  
   return (
     <div className="bg-[#E8E2D8] min-h-screen flex items-center justify-center p-4">
       <div className="w-full md:max-w-md bg-white rounded-lg shadow-lg p-6 md:p-8">
@@ -87,6 +96,20 @@ export default function SignUp() {
             style={{ backgroundColor: "#6F8F72" }}
           >
             Sign Up
+          </button>
+
+          <div className="flex items-center my-4">
+            <div className="flex-grow border-t border-gray-300" />
+            <span className="mx-2 text-gray-400 text-sm">OR</span>
+            <div className="flex-grow border-t border-gray-300" />
+          </div>
+
+          <button
+            type="button"
+            onClick={handleGoogleSignUp}
+            className="w-full py-2 rounded-lg font-semibold border border-gray-300 bg-white hover:bg-gray-50 transition cursor-pointer"
+          >
+            Sign up with Google
           </button>
         </form>
 
