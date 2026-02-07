@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -65,6 +66,51 @@ export default function InsertPage() {
             videoRef.current.srcObject = stream;
         }
     }, [isCameraActive, stream]);
+=======
+import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { QrCode } from "lucide-react";
+
+export default function InsertPage() {
+  const navigate = useNavigate();
+
+  const [isCameraActive, setIsCameraActive] = useState(false);
+  const [capturedImage, setCapturedImage] = useState(null);
+  const [stream, setStream] = useState(null);
+  const [fileName, setFileName] = useState("");
+  const [showQR, setShowQR] = useState(false);
+  const [isScanning, setIsScanning] = useState(false);
+
+  const videoRef = useRef(null);
+  const canvasRef = useRef(null);
+  const fileInputRef = useRef(null);
+
+  const sendImage = async () => {
+    if (!capturedImage) return;
+
+    try {
+      const imgData = capturedImage.split(",")[1]; //isolate image data (this cuts out the image prefix from it being a png)
+
+      // Extract image type from the data URL
+      const imageTypeMatch = capturedImage.match(/data:([^;]+)/);
+      const imageType = imageTypeMatch ? imageTypeMatch[1] : "image/png";
+
+      const clauderesult = await fetch("http://localhost:3000/scan_receipt", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ image: imgData, imageType: imageType }),
+      });
+
+      const result = await clauderesult.json();
+
+      if (clauderesult.ok) {
+        console.log("analysis:", result);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+>>>>>>> Stashed changes
 
 
     const stopCamera = () => {
@@ -177,6 +223,7 @@ export default function InsertPage() {
                     )}
 
 
+<<<<<<< Updated upstream
                     {capturedImage && (
                         <div className="grid grid-cols-2 gap-3">
                             <button onClick={() => setCapturedImage(null)} className="py-3 bg-[#F2A65A] text-white font-bold rounded-xl shadow-md">
@@ -196,6 +243,25 @@ export default function InsertPage() {
                         <p className="mt-4 text-red-700 font-bold text-center">{saveError}</p>
                     )}
                 </div>
+=======
+            {capturedImage && (
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  onClick={() => setCapturedImage(null)}
+                  className="py-3 bg-[#F2A65A] text-white font-bold rounded-xl shadow-md"
+                >
+                  Retake
+                </button>
+                <button
+                  onClick={sendImage}
+                  className="py-3 bg-[#6F8F72] text-white font-bold rounded-xl shadow-md"
+                >
+                  Save
+                </button>
+              </div>
+            )}
+          </div>
+>>>>>>> Stashed changes
 
                 {/* UPLOAD FROM DEVICE */}
                 {!isCameraActive && !capturedImage && (
