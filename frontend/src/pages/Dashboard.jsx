@@ -201,6 +201,7 @@ const Dashboard = () => {
               {pages.find(p => p.id === activePage)?.name}
             </h2>
           </div>
+          <Link to="/addreceipt">
           <button
             className="px-4 py-2 rounded text-white hover:opacity-90 transition-opacity text-sm md:text-base translate-y-[2px]"
             style={{ backgroundColor: '#6F8F72' }}
