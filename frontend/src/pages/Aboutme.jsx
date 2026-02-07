@@ -11,32 +11,32 @@ export default function AboutUs() {
         // 1. MAIN BACKGROUND (White)
         <div className="bg-[white/80] text-[#6F8F72] min-h-screen flex flex-col">
             <nav className="bg-white/40 backdrop-blur-md shadow-sm !py-2 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto flex justify-between items-center px-8">
-          <motion.img 
-            src="https://cdn.discordapp.com/attachments/1465402222278869096/1467728379162787850/3a30211634add9ca0ee192b38fad5790-color-stroke-bundle-of-parsley.png?ex=69880792&is=6986b612&hm=a83433f8d81e8fe0498673a9c8362dc0240b487d85a1ce697aeb74005f37cbb4&" 
-            alt="Parsely Logo" 
-            className="h-14 cursor-pointer"
-            whileHover={{ scale: 1.05, rotate: 5 }}
-            transition={{ type: "spring", stiffness: 300 }}
-          />
-          <div className="flex items-center gap-8">
-            <a href="#dashboard" className="text-lg font-medium text-gray-700 hover:text-[#6F8F72] transition-colors relative group">
-              Dashboard
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#6F8F72] group-hover:w-full transition-all duration-300"></span>
-            </a>
-            <a href="#about" className="text-lg font-medium text-gray-700 hover:text-[#6F8F72] transition-colors relative group">
-              About Us
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#6F8F72] group-hover:w-full transition-all duration-300"></span>
-            </a>
-            <button className="px-6 py-2.5 text-[#6F8F72] font-medium hover:bg-gray-100 rounded-full transition-all">
-              Login
-            </button>
-            <button className="px-6 py-2.5 bg-gradient-to-r from-[#6F8F72] to-[#5c7c60] text-white font-medium rounded-full shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all">
-              Sign Up
-            </button>
-          </div>
-        </div>
-      </nav>
+                <div className="max-w-7xl mx-auto flex justify-between items-center px-8">
+                <motion.img 
+                    src="https://cdn.discordapp.com/attachments/1465402222278869096/1467728379162787850/3a30211634add9ca0ee192b38fad5790-color-stroke-bundle-of-parsley.png?ex=69880792&is=6986b612&hm=a83433f8d81e8fe0498673a9c8362dc0240b487d85a1ce697aeb74005f37cbb4&" 
+                    alt="Parsely Logo" 
+                    className="h-14 cursor-pointer"
+                    whileHover={{ scale: 1.05, rotate: 5 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                />
+                <div className="flex items-center gap-8">
+                    <a href="#dashboard" className="text-lg font-medium text-gray-700 hover:text-[#6F8F72] transition-colors relative group">
+                    Dashboard
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#6F8F72] group-hover:w-full transition-all duration-300"></span>
+                    </a>
+                    <a href="#about" className="text-lg font-medium text-gray-700 hover:text-[#6F8F72] transition-colors relative group">
+                    About Us
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#6F8F72] group-hover:w-full transition-all duration-300"></span>
+                    </a>
+                    <button className="px-6 py-2.5 text-[#6F8F72] font-medium hover:bg-gray-100 rounded-full transition-all">
+                    Login
+                    </button>
+                    <button className="px-6 py-2.5 bg-gradient-to-r from-[#6F8F72] to-[#5c7c60] text-white font-medium rounded-full shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all">
+                    Sign Up
+                    </button>
+                </div>
+                </div>
+            </nav>
 
             <div className="bg-white/80 py-16">
                 {/* Heading with typewriter animation */}

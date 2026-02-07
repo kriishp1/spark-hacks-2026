@@ -24,7 +24,7 @@ export default function Login() {
                 setMessage(error.message);
             } else {
                 setMessage("You can Sign In");
-                navigate("/Dashboard");
+                navigate("/dashboard");
             }
 
 
@@ -69,9 +69,14 @@ export default function Login() {
                             style={{ borderColor: '#E8E2D8' }}
                         />
                         <div className="text-right mt-2">
-                            <a href="#" style={{ color: '#6F8F72' }} className="text-sm font-semibold hover:underline">
+                            <button
+                                type="button"
+                                onClick={() => navigate('/forgot-password')}
+                                style={{ color: '#6F8F72' }}
+                                className="text-sm font-semibold hover:underline"
+                            >
                                 Forgot password?
-                            </a>
+                            </button>
                         </div>
                     </div>
 
@@ -95,9 +100,13 @@ export default function Login() {
 
                 <p className="text-center text-gray-600 text-sm mt-6">
                     Don't have an account?{' '}
-                    <a href="#" style={{ color: '#6F8F72' }} className="font-semibold hover:underline">
+                    <button
+                        onClick={() => navigate('/signup')}
+                        style={{ color: '#6F8F72' }}
+                        className="font-semibold hover:underline"
+                    >
                         Sign up
-                    </a>
+                    </button>
                 </p>
             </div>
         </div>
