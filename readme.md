@@ -122,7 +122,7 @@ Americans leave hundreds of dollars on the table each year through:
 
 ## 🏆 Hackathon Project
 
-Parsley was built during a hackathon weekend. Key learnings:
+Parsley was built during Sparkhacks 2026. Key learnings:
 - **Real-time learning** - Most of the team learned Tailwind CSS on the fly
 - **Collaboration** - Navigating merge conflicts and coordinating across the codebase
 - **Problem decomposition** - Breaking big features into shippable chunks
