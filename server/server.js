@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
 import { setupScanReceiptRoute } from "./parseai.js";
+import { setupTwilioRoutes } from "./twilioSms.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.join(__dirname, '.env') });
@@ -24,6 +25,7 @@ app.get("/", (req, res) => {
 
 // Setup routes
 setupScanReceiptRoute(app);
+setupTwilioRoutes(app);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
