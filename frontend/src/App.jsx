@@ -6,6 +6,8 @@ import Dashboard from './pages/Dashboard.jsx'
 import {Routes, Route} from 'react-router-dom'
 import { motion } from "motion/react"
 import InsertPage from './pages/InsertPage.jsx'
+import Wrapper from './pages/Wrapper.jsx';
+
 
 function App() {
   return (
@@ -14,12 +16,13 @@ function App() {
       <Route path="/signup" element={<SignUp />} />
       <Route path="/login" element={<Login />} />
       <Route path="/Landing" element={<Landing />} />
-<<<<<<< HEAD
-      <Route path="/Dashboard" element={<Dashboard/>}/>
-      <Route path="/AddReceipt" element={<InsertPage/>}/>
-=======
-      <Route path="/Dashboard" element={<Dashboard />}/>"
->>>>>>> dbf31860e8bb0a801a68ae5bbb6ac0137b75baa9
+
+      <Route path="/dashboard" element={
+          <Wrapper>
+            <Dashboard />
+          </Wrapper>
+          } 
+      />
     </Routes>
   ) 
 }

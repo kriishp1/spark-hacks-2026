@@ -1,19 +1,37 @@
 import React, { useState } from 'react';
-import { Menu, X, Home, BarChart2, Settings, Users, FileText, Bell } from 'lucide-react';
+import { Menu, X, Home, BarChart2, Settings, Users, FileText, Bell, LogOut } from 'lucide-react';
+import { supabase } from '../supaBaseClient';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activePage, setActivePage] = useState('home');
-``
+  const navigate = useNavigate();
+
   const pages = [
     { id: 'home', name: 'Home', icon: Home },
     { id: 'receipt', name: 'My Receipts', icon: FileText },
     { id: 'settings', name: 'Settings', icon: Settings },
   ];
 
+  const handleLogout = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.error('Error logging out:', error);
+      } else {
+        navigate('/login');
+      }
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
+
   function getReceipts(){
 
   }
+
+  
 
   // Sample content for different pages
   const renderContent = () => {
@@ -146,6 +164,19 @@ const Dashboard = () => {
               </div>
             )}
           </div>
+          
+          {/* Logout Button */}
+          <button
+            onClick={handleLogout}
+            className={`w-full flex items-center px-4 py-2 mt-3 rounded-lg transition-all cursor-pointer text-white hover:bg-red-500 hover:bg-opacity-20 ${
+              !sidebarOpen && 'justify-center'
+            }`}
+          >
+            <LogOut size={20} />
+            <span className={`ml-3 ${!sidebarOpen && 'hidden'}`}>
+              Logout
+            </span>
+          </button>
         </div>
       </div>
 
