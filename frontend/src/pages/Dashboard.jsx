@@ -1,17 +1,36 @@
 import React, { useState } from 'react';
 import { Menu, X, Home, BarChart2, Settings, Users, FileText, Bell } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activePage, setActivePage] = useState('home');
-  
-``
+`  const navigate = useNavigate();`
+
   const pages = [
     { id: 'home', name: 'Home', icon: Home },
     { id: 'receipt', name: 'My Receipts', icon: FileText },
     { id: 'settings', name: 'Settings', icon: Settings },
   ];
 
+  const handleLogout = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.error('Error logging out:', error);
+      } else {
+        navigate('/login');
+      }
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
+
+  function getReceipts(){
+
+  }
+
+  
 
   // Sample content for different pages
   const renderContent = () => {
@@ -122,7 +141,10 @@ const Dashboard = () => {
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col overflow-auto">
         {/* Mobile & Desktop Top Bar */}
-        <div className="shadow-sm p-4 flex items-center justify-between" style={{ backgroundColor: '#E8E2D8' }}>
+        <div
+          className="shadow-sm p-4 flex items-center justify-between"
+          style={{ backgroundColor: '#E8E2D8' }}
+        >
           <div className="flex items-center gap-3">
             {/* Mobile Menu Button */}
             <button
@@ -136,6 +158,7 @@ const Dashboard = () => {
               {pages.find(p => p.id === activePage)?.name}
             </h2>
           </div>
+          <Link to="/addreceipt"></Link>
           <button
             className="px-4 py-2 rounded text-white hover:opacity-90 transition-opacity text-sm md:text-base -translate-y-px"
             style={{ backgroundColor: '#6F8F72' }}

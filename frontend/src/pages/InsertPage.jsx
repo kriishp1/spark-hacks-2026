@@ -3,22 +3,46 @@ import { useNavigate } from "react-router-dom";
 import { QrCode } from 'lucide-react';
 
 export default function InsertPage() {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
+    
+    const [isCameraActive, setIsCameraActive] = useState(false);
+    const [capturedImage, setCapturedImage] = useState(null);
+    const [stream, setStream] = useState(null);
+    const [fileName, setFileName] = useState('');
+    const [showQR, setShowQR] = useState(false);
+    const [isScanning, setIsScanning] = useState(false);
+    
+    const videoRef = useRef(null);
+    const canvasRef = useRef(null);
+    const fileInputRef = useRef(null); 
 
-  // --- STATES ---
-  const [isCameraActive, setIsCameraActive] = useState(false);
-  const [capturedImage, setCapturedImage] = useState(null);
-  const [showQR, setShowQR] = useState(false);
+    const sendImage = async () => {
+        if (!capturedImage) return;
 
-  // Scanning State
-  const [isScanning, setIsScanning] = useState(false);
+        try {
+        const imgData = capturedImage.split(',')[1]; //isolate image data (this cuts out the image prefix from it being a png)
+        
+        // Extract image type from the data URL
+        const imageTypeMatch = capturedImage.match(/data:([^;]+)/);
+        const imageType = imageTypeMatch ? imageTypeMatch[1] : 'image/png';
 
-  const [stream, setStream] = useState(null);
-  const [fileName, setFileName] = useState("");
+        const clauderesult = await fetch('http://localhost:3000/scan_receipt',{
+            method : 'POST',
+            headers : {'Content-Type':'application/json'},
+            body : JSON.stringify({image : imgData, imageType: imageType})
+        });
 
-  const videoRef = useRef(null);
-  const canvasRef = useRef(null);
-  const fileInputRef = useRef(null);
+        const result = await clauderesult.json();
+
+        if (clauderesult.ok){
+            console.log('analysis:',result);
+        }
+    }catch(error){
+        console.error(error);
+    }
+
+
+    }
 
   // --- CAMERA FUNCTIONS ---
   const startCamera = async () => {
@@ -91,7 +115,7 @@ export default function InsertPage() {
   };
 
   return (
-    <div className="bg-gradient-to-br from-[#F9F5F0] to-[#E8E2D8] text-[#6F8F72] min-h-screen flex flex-col font-sans">
+    <div className="bg-linear-to-br from-[#F9F5F0] to-[#E8E2D8] text-[#6F8F72] min-h-screen flex flex-col font-sans">
       {/* Navbar */}
       <nav className="bg-white/80 backdrop-blur-md shadow-sm py-3 w-full sticky top-0 z-50">
         <div className="container mx-auto flex justify-between items-center px-6">
@@ -221,7 +245,7 @@ export default function InsertPage() {
                   className="w-48 h-48 mb-4"
                 />
                 <p className="text-[#6F8F72] font-bold text-sm uppercase tracking-widest">
-                  Scan to Share
+                  Scan to update the receipt
                 </p>
               </div>
             )}
@@ -290,23 +314,17 @@ export default function InsertPage() {
               </div>
             )}
 
-            {capturedImage && (
-              <div className="grid grid-cols-2 gap-4">
-                <button
-                  onClick={() => setCapturedImage(null)}
-                  className="py-3 bg-gray-400 text-white font-bold rounded-xl shadow-md hover:scale-105 transition-transform duration-300"
-                >
-                  Retake
-                </button>
-                <button
-                  onClick={() => alert("Saved!")}
-                  className="py-3 bg-[#6F8F72] text-white font-bold rounded-xl shadow-md hover:scale-105 transition-transform duration-300"
-                >
-                  Save
-                </button>
-              </div>
-            )}
-          </div>
+                    {capturedImage && (
+                        <div className="grid grid-cols-2 gap-3">
+                            <button onClick={() => setCapturedImage(null)} className="py-3 bg-[#F2A65A] text-white font-bold rounded-xl shadow-md">
+                                Retake
+                            </button>
+                            <button onClick={sendImage} className="py-3 bg-[#6F8F72] text-white font-bold rounded-xl shadow-md">
+                                Save
+                            </button>
+                        </div>
+                    )}
+                </div>
 
           {/* --- BOTTOM ACTIONS (Slicker Animations) --- */}
           {!isCameraActive && !capturedImage && !showQR && (
