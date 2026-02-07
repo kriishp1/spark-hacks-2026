@@ -71,8 +71,8 @@ const ReceiptCard = ({ receipt, onDelete }) => {
         <p className="text-sm text-gray-700 font-medium">{expiryDate || 'N/A'}</p>
       </div>
 
-      {/* Delete button (red) */}
-      <div className="flex justify-end">
+      {/* Delete button (red, centered) */}
+      <div className="flex justify-center">
         <button
           onClick={onDelete}
           className="px-4 py-2 bg-red-600 text-white rounded-lg font-bold hover:bg-red-800 transition-colors"
