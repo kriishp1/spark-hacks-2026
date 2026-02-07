@@ -15,6 +15,34 @@ export default function InsertPage() {
     const canvasRef = useRef(null);
     const fileInputRef = useRef(null); 
 
+    const sendImage = async () => {
+        if (!capturedImage) return;
+
+        try {
+        const imgData = capturedImage.split(',')[1]; //isolate image data (this cuts out the image prefix from it being a png)
+        
+        // Extract image type from the data URL
+        const imageTypeMatch = capturedImage.match(/data:([^;]+)/);
+        const imageType = imageTypeMatch ? imageTypeMatch[1] : 'image/png';
+
+        const clauderesult = await fetch('http://localhost:3000/scan_receipt',{
+            method : 'POST',
+            headers : {'Content-Type':'application/json'},
+            body : JSON.stringify({image : imgData, imageType: imageType})
+        });
+
+        const result = await clauderesult.json();
+
+        if (clauderesult.ok){
+            console.log('analysis:',result);
+        }
+    }catch(error){
+        console.error(error);
+    }
+
+
+    }
+
     const startCamera = async () => {
         try {
             const mediaStream = await navigator.mediaDevices.getUserMedia({ 
@@ -160,7 +188,7 @@ export default function InsertPage() {
                             <button onClick={() => setCapturedImage(null)} className="py-3 bg-[#F2A65A] text-white font-bold rounded-xl shadow-md">
                                 Retake
                             </button>
-                            <button onClick={() => alert("Saved!")} className="py-3 bg-[#6F8F72] text-white font-bold rounded-xl shadow-md">
+                            <button onClick={sendImage} className="py-3 bg-[#6F8F72] text-white font-bold rounded-xl shadow-md">
                                 Save
                             </button>
                         </div>
