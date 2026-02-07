@@ -11,6 +11,10 @@ const Dashboard = () => {
     { id: 'settings', name: 'Settings', icon: Settings },
   ];
 
+  function getReceipts(){
+
+  }
+
   // Sample content for different pages
   const renderContent = () => {
     switch (activePage) {
