@@ -17,7 +17,9 @@ console.log('__dirname:', __dirname);
 
 const app = express();
 
-app.use(cors({ origin: "http://localhost:5173" }));
+app.use(cors({ 
+  origin: ["http://localhost:5173", "https://spark-hacks-2026.vercel.app"] 
+}));
 app.use(express.json({ limit: '30mb' }));
 
 // Health check endpoint
