@@ -1,5 +1,6 @@
 import SignUp from "./SignUp";
 import { Link } from "react-router-dom";
+import { motion } from "motion/react"
 
 function Landing() {
   console.log("Landing is rendering");
