@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Menu, X, Home, BarChart2, Settings, Users, FileText, Bell, LogOut } from 'lucide-react';
 import { supabase } from '../supaBaseClient';
 import { useNavigate } from 'react-router-dom';

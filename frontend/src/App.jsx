@@ -23,6 +23,13 @@ function App() {
           </Wrapper>
           } 
       />
+
+      <Route path="/addreceipt" element={
+          <Wrapper>
+            <InsertPage/> 
+          </Wrapper>
+          } 
+      />
     </Routes>
   ) 
 }
