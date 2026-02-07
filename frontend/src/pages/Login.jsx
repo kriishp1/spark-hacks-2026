@@ -1,4 +1,4 @@
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, redirect } from "react-router-dom";
 import { supabase } from "../supaBaseClient"
 import { useState } from "react"
 
@@ -31,6 +31,16 @@ export default function Login() {
         } catch (error) {
             console.error("Network error:", error);
             setMessage("Network error. Please try again.");
+        }
+    }
+
+    const handleGoogleLogin = async () => {
+        const { error } = await supabase.auth.signInWithOAuth({
+            provider: "google"
+        })
+
+        if (error) {
+            setMessage(error.message);
         }
     }
     return (
@@ -90,6 +100,20 @@ export default function Login() {
                         style={{ backgroundColor: '#6F8F72' }}
                     >
                         Sign In
+                    </button>
+
+                    <div className="flex items-center my-4">
+                        <div className="flex-grow border-t" />
+                        <span className="mx-2 text-gray-400 text-sm">OR</span>
+                        <div className="flex-grow border-t" />
+                    </div>
+
+                    <button
+                        type="button"
+                        onClick={handleGoogleLogin}
+                        className="w-full py-2 rounded-lg font-semibold border border-gray-300 bg-white hover:bg-gray-50 transition cursor-pointer"
+                    >
+                        Sign in with Google
                     </button>
                 </form>
 

@@ -76,11 +76,6 @@ const Dashboard = () => {
     setReceipts((prev) => prev.filter((r) => r.id !== id));
   };
 
-  function getReceipts(){
-
-  }
-
-  
 
   // Sample content for different pages
   const renderContent = () => {
@@ -128,9 +123,12 @@ const Dashboard = () => {
         return (
           <div>
             <h1 className="text-3xl font-bold mb-6" style={{ color: '#6F8F72' }}>
-              Users
+              {userName}
             </h1>
             <div className="p-6 rounded-lg shadow-md" style={{ backgroundColor: '#E8E2D8' }}>
+              <h2 className="text-2xl font-semibold mb-4" style={{ color: '#6F8F72' }}>
+                Account Settings
+              </h2>
               <p className="text-gray-700">User management content goes here.</p>
             </div>
           </div>
