@@ -13,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.73.0",
+    "@sendgrid/mail": "^8.1.6",
     "@supabase/supabase-js": "^2.95.3",
     "cors": "^2.8.6",
     "dotenv": "^17.2.4",

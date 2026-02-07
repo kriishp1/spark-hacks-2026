@@ -10,8 +10,6 @@ const Dashboard = () => {
   const [activePage, setActivePage] = useState('receipt');
   const [userEmail, setUserEmail] = useState("");
   const [userName, setUserName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [notificationFrequency, setNotificationFrequency] = useState("7");
   const navigate = useNavigate();
   const [receipts, setReceipts] = useState([]);
 
@@ -33,7 +31,6 @@ const Dashboard = () => {
 
   const pages = [
     { id: 'receipt', name: 'My Receipts', icon: FileText },
-    { id: 'settings', name: 'Settings', icon: Settings },
   ];
 
   const handleLogout = async () => {
@@ -136,7 +133,7 @@ const Dashboard = () => {
 
       if (!error && data) {
         setPhoneNumber(data.phone_number || "");
-        setNotificationFrequency(data.notification_frequency || "7");
+        setNotificationFrequency(data.notification_frequency || "weekly");
       }
     } catch (error) {
       console.log('No user settings found, using defaults');
@@ -149,17 +146,6 @@ const Dashboard = () => {
       if (!user) {
         console.error('No user logged in');
         return;
-      }
-
-      // Validate phone number if provided
-      if (phoneNumber) {
-        const cleaned = phoneNumber.replace(/[\s\-\(\)]/g, '');
-        const phoneRegex = /^\+?[1-9]\d{9,14}$/;
-        
-        if (!phoneRegex.test(cleaned)) {
-          alert('Please enter a valid phone number (e.g., +1234567890)');
-          return;
-        }
       }
 
       const { error } = await supabase
@@ -175,14 +161,12 @@ const Dashboard = () => {
 
       if (error) {
         console.error('Error saving settings:', error);
-        alert('Failed to save settings. Please try again.');
         return;
       }
 
       alert('Settings saved successfully!');
     } catch (error) {
       console.error('Save failed:', error);
-      alert('An error occurred. Please try again.');
     }
   };
 
@@ -232,57 +216,7 @@ const Dashboard = () => {
             </div>
           </div>
         );
-      case 'settings':
-        return (
-          <div>
-            <h1 className="text-3xl font-bold mb-6" style={{ color: '#6F8F72' }}>
-              Settings
-            </h1>
-            <div className="max-w-2xl p-6 rounded-lg shadow-md" style={{ backgroundColor: '#E8E2D8' }}>
-              {/* Phone Number Input */}
-              <div className="mb-6">
-                <label className="block text-lg font-semibold text-gray-800 mb-2">
-                  Phone Number
-                </label>
-                <input
-                  type="tel"
-                  placeholder="Enter your phone number"
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                  className="w-full px-4 py-2 border-2 border-[#BFC6C4] rounded-lg focus:outline-none focus:border-[#6F8F72]"
-                />
-              </div>
-
-              {/* Notification Frequency Dropdown */}
-              <div className="mb-6">
-                <label className="block text-lg font-semibold text-gray-800 mb-2">
-                  Notify Me Before Expiration
-                </label>
-                <select
-                  value={notificationFrequency}
-                  onChange={(e) => setNotificationFrequency(e.target.value)}
-                  className="w-full px-4 py-2 border-2 border-[#BFC6C4] rounded-lg focus:outline-none focus:border-[#6F8F72]"
-                >
-                  <option value="1">1 day before</option>
-                  <option value="3">3 days before</option>
-                  <option value="7">7 days before</option>
-                  <option value="14">14 days before</option>
-                  <option value="30">30 days before</option>
-                  <option value="never">Never</option>
-                </select>
-              </div>
-
-              {/* Save Button */}
-              <button
-                onClick={saveUserSettings}
-                className="px-6 py-3 rounded-lg text-white font-bold hover:opacity-90 transition-opacity text-base"
-                style={{ backgroundColor: '#6F8F72' }}
-              >
-                Save Settings
-              </button>
-            </div>
-          </div>
-        );
+      
       case 'receipt':
         return (
           <div>

@@ -24,7 +24,9 @@ export default function InsertPage() {
         throw new Error('No user logged in');
         }
 
-        const total = receiptData.items.reduce((sum, item) => {
+        // Check if items exist, if not use empty array
+        const items = receiptData.items || [];
+        const total = items.reduce((sum, item) => {
         return sum + (item.price * item.quantity);
         }, 0);
 
@@ -59,6 +61,7 @@ export default function InsertPage() {
             return_policy : receiptData.return_policy,
             items: receiptData.items,
             total_amount: total,
+            expires:receiptData.expires,
         }]).select();
         if (error) throw error;
         console.log('Receipt saved!', data);

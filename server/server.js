@@ -4,12 +4,14 @@ import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
 import { setupScanReceiptRoute } from "./parseai.js";
-import { setupTwilioRoutes } from "./twilioSms.js";
+
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.join(__dirname, '.env') });
 
 console.log('CLAUDE_API_KEY loaded:', process.env.CLAUDE_API_KEY ? 'Yes' : 'No');
+
+
 console.log('Current working directory:', process.cwd());
 console.log('__dirname:', __dirname);
 
@@ -25,7 +27,6 @@ app.get("/", (req, res) => {
 
 // Setup routes
 setupScanReceiptRoute(app);
-setupTwilioRoutes(app);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
