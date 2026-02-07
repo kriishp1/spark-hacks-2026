@@ -10,6 +10,8 @@ const Dashboard = () => {
   const [activePage, setActivePage] = useState('receipt');
   const [userEmail, setUserEmail] = useState("");
   const [userName, setUserName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [notificationFrequency, setNotificationFrequency] = useState("7");
   const navigate = useNavigate();
   const [receipts, setReceipts] = useState([]);
 
@@ -21,6 +23,8 @@ const Dashboard = () => {
         // Try to get username from user_metadata or fallback to email prefix
         setUserName(user.user_metadata?.username || user.email?.split("@")[0] || "User");
 
+        // Load user settings
+        await loadUserSettings(user.id);
         getReceipts();
       }
     }
@@ -122,6 +126,66 @@ const Dashboard = () => {
     }
   };
 
+  const loadUserSettings = async (userId) => {
+    try {
+      const { data, error } = await supabase
+        .from('user_settings')
+        .select('phone_number, notification_frequency')
+        .eq('user_id', userId)
+        .single();
+
+      if (!error && data) {
+        setPhoneNumber(data.phone_number || "");
+        setNotificationFrequency(data.notification_frequency || "7");
+      }
+    } catch (error) {
+      console.log('No user settings found, using defaults');
+    }
+  };
+
+  const saveUserSettings = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        console.error('No user logged in');
+        return;
+      }
+
+      // Validate phone number if provided
+      if (phoneNumber) {
+        const cleaned = phoneNumber.replace(/[\s\-\(\)]/g, '');
+        const phoneRegex = /^\+?[1-9]\d{9,14}$/;
+        
+        if (!phoneRegex.test(cleaned)) {
+          alert('Please enter a valid phone number (e.g., +1234567890)');
+          return;
+        }
+      }
+
+      const { error } = await supabase
+        .from('user_settings')
+        .upsert(
+          {
+            user_id: user.id,
+            phone_number: phoneNumber,
+            notification_frequency: notificationFrequency,
+          },
+          { onConflict: 'user_id' }
+        );
+
+      if (error) {
+        console.error('Error saving settings:', error);
+        alert('Failed to save settings. Please try again.');
+        return;
+      }
+
+      alert('Settings saved successfully!');
+    } catch (error) {
+      console.error('Save failed:', error);
+      alert('An error occurred. Please try again.');
+    }
+  };
+
 
 
 
@@ -172,10 +236,50 @@ const Dashboard = () => {
         return (
           <div>
             <h1 className="text-3xl font-bold mb-6" style={{ color: '#6F8F72' }}>
-              Users
+              Settings
             </h1>
-            <div className="p-6 rounded-lg shadow-md" style={{ backgroundColor: '#E8E2D8' }}>
-              <p className="text-gray-700">User management content goes here.</p>
+            <div className="max-w-2xl p-6 rounded-lg shadow-md" style={{ backgroundColor: '#E8E2D8' }}>
+              {/* Phone Number Input */}
+              <div className="mb-6">
+                <label className="block text-lg font-semibold text-gray-800 mb-2">
+                  Phone Number
+                </label>
+                <input
+                  type="tel"
+                  placeholder="Enter your phone number"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  className="w-full px-4 py-2 border-2 border-[#BFC6C4] rounded-lg focus:outline-none focus:border-[#6F8F72]"
+                />
+              </div>
+
+              {/* Notification Frequency Dropdown */}
+              <div className="mb-6">
+                <label className="block text-lg font-semibold text-gray-800 mb-2">
+                  Notify Me Before Expiration
+                </label>
+                <select
+                  value={notificationFrequency}
+                  onChange={(e) => setNotificationFrequency(e.target.value)}
+                  className="w-full px-4 py-2 border-2 border-[#BFC6C4] rounded-lg focus:outline-none focus:border-[#6F8F72]"
+                >
+                  <option value="1">1 day before</option>
+                  <option value="3">3 days before</option>
+                  <option value="7">7 days before</option>
+                  <option value="14">14 days before</option>
+                  <option value="30">30 days before</option>
+                  <option value="never">Never</option>
+                </select>
+              </div>
+
+              {/* Save Button */}
+              <button
+                onClick={saveUserSettings}
+                className="px-6 py-3 rounded-lg text-white font-bold hover:opacity-90 transition-opacity text-base"
+                style={{ backgroundColor: '#6F8F72' }}
+              >
+                Save Settings
+              </button>
             </div>
           </div>
         );
