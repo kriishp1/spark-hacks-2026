@@ -1,7 +1,14 @@
 @import "tailwindcss";
 
+<<<<<<< HEAD
 * {
   font-family: 'Oswald', sans-serif;
 }
 
 
+=======
+:root{
+  --background-bg: #E8E2D8;
+  
+}
+>>>>>>> 91581c232891389206cd8d35468335b5b05df6ee
