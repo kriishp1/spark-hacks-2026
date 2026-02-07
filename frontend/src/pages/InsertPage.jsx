@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '../supaBaseClient';
 
 export default function InsertPage() {
     const navigate = useNavigate();
@@ -15,6 +16,54 @@ export default function InsertPage() {
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
     const fileInputRef = useRef(null); 
+
+    const saveReceipt = async (receiptData) => {
+        const { data: { user } } = await supabase.auth.getUser();
+
+        if (!user) {
+        throw new Error('No user logged in');
+        }
+
+        const total = receiptData.items.reduce((sum, item) => {
+        return sum + (item.price * item.quantity);
+        }, 0);
+
+        const { data: existingReceipts, error: checkError } = await supabase
+            .from('receipts')
+            .select('*')
+            .eq('user_id', user.id)
+            .eq('store_name', receiptData.store)
+            .eq('receipt_data', receiptData.date)
+            .eq('total_amount', total);
+
+        if (checkError) throw checkError;
+
+        // If duplicate found, ask user
+        if (existingReceipts && existingReceipts.length > 0) {
+            const shouldSave = window.confirm(
+                `A receipt from ${receiptData.store} on ${receiptData.date} for $${total.toFixed(2)} already exists. Save anyway?`
+            );
+            
+            if (!shouldSave) {
+                console.log('User cancelled - duplicate receipt');
+                return null;
+            }
+        }
+
+
+        const {data,error} = await supabase.from('receipts').insert([{
+            user_id : user.id,
+            receipt_data : receiptData.date,
+            store_name : receiptData.store,
+            warranty : receiptData.warranty,
+            return_policy : receiptData.return_policy,
+            items: receiptData.items,
+            total_amount: total,
+        }]).select();
+        if (error) throw error;
+        console.log('Receipt saved!', data);
+        return data;
+    };
 
     const sendImage = async () => {
         if (!capturedImage) return;
@@ -31,6 +80,7 @@ export default function InsertPage() {
                 body : JSON.stringify({image : imgData, imageType: imageType})
             });
             const result = await clauderesult.json();
+            saveReceipt(result);
             if (clauderesult.ok){
                 setSaveSuccess(true);
                 setSaveError("");

@@ -63,12 +63,12 @@ const ReceiptCard = ({ receipt, onDelete }) => {
         <span className="font-bold text-[#6F8F72]">${totalPrice?.toFixed(2) || '0.00'}</span>
       </div>
 
-      {/* Return policy and expiry date */}
-      <div className="mb-4">
-        {/* Return policy */}
-        <p className="text-sm text-[#6F8F72] mb-1">Return Policy: {returnPolicy || 'N/A'}</p>
-        {/* Expiry date */}
-        <p className="text-sm text-[#6F8F72]">Expires: {expiryDate || 'N/A'}</p>
+      {/* Warranty/Return Policy Label */}
+      <div className="mb-4 p-3 rounded-lg bg-[#F8F6F2] border border-[#BFC6C4]">
+        <p className="text-xs font-semibold text-[#6F8F72] mb-1">WARRANTY</p>
+        <p className="text-sm text-gray-700 mb-2">{returnPolicy || 'N/A'}</p>
+        <p className="text-xs font-semibold text-[#6F8F72] mb-1">EXPIRES</p>
+        <p className="text-sm text-gray-700 font-medium">{expiryDate || 'N/A'}</p>
       </div>
 
       {/* Delete button (red) */}

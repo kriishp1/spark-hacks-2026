@@ -7,39 +7,11 @@ import ReceiptCard from '../componets/ReceiptCard';
 
 const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [activePage, setActivePage] = useState('home');
+  const [activePage, setActivePage] = useState('receipt');
   const [userEmail, setUserEmail] = useState("");
   const [userName, setUserName] = useState("");
   const navigate = useNavigate();
-  const [receipts, setReceipts] = useState([
-    {
-      id: 1,
-      svg: '', // You can put SVG markup here or leave blank for default
-      purchaseDate: '2026-02-01',
-      storeName: 'SuperMart',
-      items: [
-        { name: 'Milk', cost: 3.49 },
-        { name: 'Bread', cost: 2.29 },
-        { name: 'Eggs', cost: 4.19 },
-      ],
-      totalPrice: 9.97,
-      returnPolicy: '30 days with receipt',
-      expiryDate: '2026-03-02',
-    },
-    {
-      id: 2,
-      svg: '',
-      purchaseDate: '2026-01-15',
-      storeName: 'TechStore',
-      items: [
-        { name: 'USB Cable', cost: 7.99 },
-        { name: 'Charger', cost: 19.99 },
-      ],
-      totalPrice: 27.98,
-      returnPolicy: '14 days, unopened',
-      expiryDate: '2026-01-29',
-    },
-  ]);
+  const [receipts, setReceipts] = useState([]);
 
   useEffect(() => {
     async function fetchUser() {
@@ -48,13 +20,14 @@ const Dashboard = () => {
         setUserEmail(user.email || "");
         // Try to get username from user_metadata or fallback to email prefix
         setUserName(user.user_metadata?.username || user.email?.split("@")[0] || "User");
+
+        getReceipts();
       }
     }
     fetchUser();
   }, []);
 
   const pages = [
-    { id: 'home', name: 'Home', icon: Home },
     { id: 'receipt', name: 'My Receipts', icon: FileText },
     { id: 'settings', name: 'Settings', icon: Settings },
   ];
@@ -72,15 +45,86 @@ const Dashboard = () => {
     }
   };
 
-  const handleDeleteReceipt = (id) => {
-    setReceipts((prev) => prev.filter((r) => r.id !== id));
+  const calculateExpiryDate = (purchaseDate, returnPolicy) => {
+    if (!returnPolicy || !purchaseDate) return null;
+
+    // Try to extract days from return policy
+    const match = returnPolicy.match(/(\d+)\s*day/i);
+    if (!match) return null;
+
+    const days = parseInt(match[1]);
+    const date = new Date(purchaseDate);
+    date.setDate(date.getDate() + days);
+    return date.toISOString().split('T')[0];
   };
 
-  function getReceipts(){
+  const getReceipts = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        console.log('No user logged in');
+        return;
+      }
+      const { data, error } = await supabase
+        .from('receipts')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('receipt_data', { ascending: false });
 
+      if (error) { // MOVED: Check error before using data
+        console.error('Error fetching receipts:', error);
+        return;
+      }
+
+      const formatted = data.map(receipt => ({
+        id: receipt.id,
+        purchaseDate: receipt.receipt_data,
+        storeName: receipt.store_name,
+        items: receipt.items?.map(item => ({
+          name: item.quantity > 1 ? `${item.item} x${item.quantity}` : item.item,
+          cost: item.price * item.quantity
+        })) || [],
+        totalPrice: receipt.total_amount,
+        returnPolicy: receipt.return_policy,
+        expiryDate: receipt.expires || calculateExpiryDate(receipt.receipt_data, receipt.return_policy),
+      }));
+
+      setReceipts(formatted);
+
+    } catch (error) {
+      console.error('Error in getReceipts:', error);
+    }
   }
 
-  
+  const handleDeleteReceipt = async (id) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        console.error('No user logged in');
+        return;
+      }
+
+      const { error } = await supabase
+        .from('receipts')
+        .delete()
+        .eq('id', id)
+        .eq('user_id', user.id);
+
+      if (error) {
+        console.error('Error deleting receipt:', error);
+        return;
+      }
+
+      // Update local state after successful deletion
+      setReceipts((prev) => prev.filter((r) => r.id !== id));
+    } catch (error) {
+      console.error('Delete failed:', error);
+    }
+  };
+
+
+
+
 
   // Sample content for different pages
   const renderContent = () => {
@@ -175,17 +219,15 @@ const Dashboard = () => {
     <div className="flex flex-col md:flex-row h-screen bg-gray-50">
       {/* Desktop Sidebar */}
       <div
-        className={`hidden md:flex ${
-          sidebarOpen ? 'w-64' : 'w-20'
-        } transition-all duration-300 shadow-lg flex-col`}
+        className={`hidden md:flex ${sidebarOpen ? 'w-64' : 'w-20'
+          } transition-all duration-300 shadow-lg flex-col`}
         style={{ backgroundColor: '#6F8F72' }}
       >
         {/* Sidebar Header */}
         <div className="p-4 flex items-center justify-between">
           <h2
-            className={`text-white font-bold text-xl ${
-              !sidebarOpen && 'hidden'
-            }`}
+            className={`text-white font-bold text-xl ${!sidebarOpen && 'hidden'
+              }`}
           >
             Dashboard
           </h2>
@@ -205,11 +247,10 @@ const Dashboard = () => {
               <button
                 key={page.id}
                 onClick={() => setActivePage(page.id)}
-                className={`w-full flex items-center px-4 py-3 mb-2 rounded-lg transition-all cursor-pointer ${
-                  activePage === page.id
-                    ? 'bg-gray-600 bg-opacity-40 text-white'
-                    : 'text-white hover:opacity-90'
-                }`}
+                className={`w-full flex items-center px-4 py-3 mb-2 rounded-lg transition-all cursor-pointer ${activePage === page.id
+                  ? 'bg-gray-600 bg-opacity-40 text-white'
+                  : 'text-white hover:opacity-90'
+                  }`}
               >
                 <Icon size={20} />
                 <span
@@ -231,13 +272,12 @@ const Dashboard = () => {
               </div>
             )}
           </div>
-          
+
           {/* Logout Button */}
           <button
             onClick={handleLogout}
-            className={`w-full flex items-center px-4 py-2 mt-3 rounded-lg transition-all cursor-pointer text-white hover:bg-red-500 hover:bg-opacity-20 ${
-              !sidebarOpen && 'justify-center'
-            }`}
+            className={`w-full flex items-center px-4 py-2 mt-3 rounded-lg transition-all cursor-pointer text-white hover:bg-red-500 hover:bg-opacity-20 ${!sidebarOpen && 'justify-center'
+              }`}
           >
             <LogOut size={20} />
             <span className={`ml-3 ${!sidebarOpen && 'hidden'}`}>
@@ -268,12 +308,12 @@ const Dashboard = () => {
             </h2>
           </div>
           <Link to="/addreceipt">
-          <button
-            className="px-4 py-2 rounded text-white hover:opacity-90 transition-opacity text-sm md:text-base translate-y-[2px]"
-            style={{ backgroundColor: '#6F8F72' }}
-          >
-            Enter New Receipt
-          </button>
+            <button
+              className="px-4 py-2 rounded text-white hover:opacity-90 transition-opacity text-sm md:text-base translate-y-[2px]"
+              style={{ backgroundColor: '#6F8F72' }}
+            >
+              Enter New Receipt
+            </button>
           </Link>
         </div>
 
@@ -293,11 +333,10 @@ const Dashboard = () => {
                       setActivePage(page.id);
                       setSidebarOpen(false);
                     }}
-                    className={`w-full flex items-center px-4 py-3 mb-2 rounded-lg transition-all cursor-pointer ${
-                      activePage === page.id
-                        ? 'bg-gray-600 bg-opacity-40 text-white'
-                        : 'text-white hover:opacity-90'
-                    }`}
+                    className={`w-full flex items-center px-4 py-3 mb-2 rounded-lg transition-all cursor-pointer ${activePage === page.id
+                      ? 'bg-gray-600 bg-opacity-40 text-white'
+                      : 'text-white hover:opacity-90'
+                      }`}
                   >
                     <Icon size={20} />
                     <span className="ml-3">{page.name}</span>

@@ -74,7 +74,7 @@ export function setupScanReceiptRoute(app) {
                         },
                         {
                             type: 'text',
-                            text: 'Analyze this receipt and return ONLY valid JSON (no markdown, no code blocks) in this exact format: {"store":"name","date":"YYYY-MM-DD","items":[{"item":"name","price":0.00,"quantity":1}],"warranty":"info","return_policy":"info"} Search the web for the warranty and return policy info for that specific store thats on the receipt specifically for each item except food.'
+                            text: 'Analyze this receipt and return ONLY valid JSON (no markdown, no code blocks) in this exact format: {"store":"name","date":"YYYY-MM-DD","items":[{"item":"name","price":0.00,"quantity":1}],"warranty":"info","return_policy":"info","expires":"date"} Search the web for the warranty, date the warranty/return policy expires(if you cant find an expiration date for this take the date purchased and add the length of the return policy/warranty in date format), and return policy info for that specific store thats on the receipt specifically for each item except food.'
                         }
                     ]
                 }]
