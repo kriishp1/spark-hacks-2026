@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -64,6 +65,7 @@ export default function InsertPage() {
             videoRef.current.srcObject = stream;
         }
     }, [isCameraActive, stream]);
+
 
     const stopCamera = () => {
         if (stream) {
@@ -173,6 +175,7 @@ export default function InsertPage() {
                             </button>
                         </div>
                     )}
+
 
                     {capturedImage && (
                         <div className="grid grid-cols-2 gap-3">
