@@ -69,14 +69,9 @@ export default function Login() {
                             style={{ borderColor: '#E8E2D8' }}
                         />
                         <div className="text-right mt-2">
-                            <button
-                                type="button"
-                                onClick={() => navigate('/forgot-password')}
-                                style={{ color: '#6F8F72' }}
-                                className="text-sm font-semibold hover:underline"
-                            >
+                            <a href="#" style={{ color: '#6F8F72' }} className="text-sm font-semibold hover:underline">
                                 Forgot password?
-                            </button>
+                            </a>
                         </div>
                     </div>
 
@@ -100,13 +95,9 @@ export default function Login() {
 
                 <p className="text-center text-gray-600 text-sm mt-6">
                     Don't have an account?{' '}
-                    <button
-                        onClick={() => navigate('/signup')}
-                        style={{ color: '#6F8F72' }}
-                        className="font-semibold hover:underline"
-                    >
+                    <a href="#" style={{ color: '#6F8F72' }} className="font-semibold hover:underline">
                         Sign up
-                    </button>
+                    </a>
                 </p>
             </div>
         </div>
