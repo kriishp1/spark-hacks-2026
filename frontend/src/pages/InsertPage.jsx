@@ -3,44 +3,46 @@ import { useNavigate } from 'react-router-dom';
 
 export default function InsertPage() {
     const navigate = useNavigate();
-    
-    
-    
     const [isCameraActive, setIsCameraActive] = useState(false);
     const [capturedImage, setCapturedImage] = useState(null);
     const [stream, setStream] = useState(null);
     const [fileName, setFileName] = useState(''); 
-    
+    const [isSaving, setIsSaving] = useState(false);
+    const [saveSuccess, setSaveSuccess] = useState(false);
+    const [saveError, setSaveError] = useState("");
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
     const fileInputRef = useRef(null); 
 
     const sendImage = async () => {
         if (!capturedImage) return;
-
+        setIsSaving(true);
+        setSaveSuccess(false);
+        setSaveError("");
         try {
-        const imgData = capturedImage.split(',')[1]; //isolate image data (this cuts out the image prefix from it being a png)
-        
-        // Extract image type from the data URL
-        const imageTypeMatch = capturedImage.match(/data:([^;]+)/);
-        const imageType = imageTypeMatch ? imageTypeMatch[1] : 'image/png';
-
-        const clauderesult = await fetch('http://localhost:3000/scan_receipt',{
-            method : 'POST',
-            headers : {'Content-Type':'application/json'},
-            body : JSON.stringify({image : imgData, imageType: imageType})
-        });
-
-        const result = await clauderesult.json();
-
-        if (clauderesult.ok){
-            console.log('analysis:',result);
+            const imgData = capturedImage.split(',')[1];
+            const imageTypeMatch = capturedImage.match(/data:([^;]+)/);
+            const imageType = imageTypeMatch ? imageTypeMatch[1] : 'image/png';
+            const clauderesult = await fetch('http://localhost:3000/scan_receipt',{
+                method : 'POST',
+                headers : {'Content-Type':'application/json'},
+                body : JSON.stringify({image : imgData, imageType: imageType})
+            });
+            const result = await clauderesult.json();
+            if (clauderesult.ok){
+                setSaveSuccess(true);
+                setSaveError("");
+                console.log('analysis:',result);
+            } else {
+                setSaveSuccess(false);
+                setSaveError("Failed to save. Please try again.");
+            }
+        }catch(error){
+            setSaveSuccess(false);
+            setSaveError("Failed to save. Please try again.");
+            console.error(error);
         }
-    }catch(error){
-        console.error(error);
-    }
-
-
+        setIsSaving(false);
     }
 
     const startCamera = async () => {
@@ -188,10 +190,18 @@ export default function InsertPage() {
                             <button onClick={() => setCapturedImage(null)} className="py-3 bg-[#F2A65A] text-white font-bold rounded-xl shadow-md">
                                 Retake
                             </button>
-                            <button onClick={sendImage} className="py-3 bg-[#6F8F72] text-white font-bold rounded-xl shadow-md">
-                                Save
+                            <button onClick={sendImage} className="py-3 bg-[#6F8F72] text-white font-bold rounded-xl shadow-md" disabled={isSaving}>
+                                {isSaving ? "Saving..." : "Save"}
                             </button>
                         </div>
+                    )}
+                    {saveSuccess && (
+                        <p className="mt-4 text-green-700 font-bold text-center">
+                            Saved! <a href="/dashboard" className="underline text-blue-600">Go to Dashboard</a>
+                        </p>
+                    )}
+                    {saveError && (
+                        <p className="mt-4 text-red-700 font-bold text-center">{saveError}</p>
                     )}
                 </div>
 
