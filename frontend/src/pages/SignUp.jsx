@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { supabase } from "../supaBaseClient";
 import { useNavigate } from "react-router-dom";
 
-export default function Login() {
+export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
