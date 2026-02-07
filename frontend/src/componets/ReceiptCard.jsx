@@ -37,13 +37,13 @@ const ReceiptCard = ({ receipt, onDelete }) => {
         <span className="text-[#6F8F72] font-bold">{storeName}</span>
       </div>
 
-      {/* List of items bought with their cost (scrollable div) */}
+      {/* List of items bought with their cost (scrollable in a div) */}
       <div className="mb-4">
-        <div className="max-h-32 overflow-y-auto pr-2 border border-[#BFC6C4] rounded-lg bg-[#f7f5f1]">
+        <div className="max-h-32 overflow-y-auto rounded bg-[#F8F6F2] p-2 border border-[#BFC6C4]">
           <ul className="divide-y divide-[#BFC6C4]">
             {items && items.length > 0 ? (
               items.map((item, idx) => (
-                <li key={idx} className="flex justify-between py-1 px-2">
+                <li key={idx} className="flex justify-between py-1">
                   {/* Item name */}
                   <span className="text-gray-700">{item.name}</span>
                   {/* Item cost */}
@@ -51,7 +51,7 @@ const ReceiptCard = ({ receipt, onDelete }) => {
                 </li>
               ))
             ) : (
-              <li className="text-gray-400 italic px-2">No items listed</li>
+              <li className="text-gray-400 italic">No items listed</li>
             )}
           </ul>
         </div>
@@ -71,11 +71,11 @@ const ReceiptCard = ({ receipt, onDelete }) => {
         <p className="text-sm text-[#6F8F72]">Expires: {expiryDate || 'N/A'}</p>
       </div>
 
-      {/* Delete button */}
+      {/* Delete button (red) */}
       <div className="flex justify-end">
         <button
           onClick={onDelete}
-          className="px-4 py-2 bg-[#F2A65A] text-white rounded-lg font-bold hover:bg-[#d18c3c] transition-colors"
+          className="px-4 py-2 bg-red-600 text-white rounded-lg font-bold hover:bg-red-800 transition-colors"
         >
           Delete
         </button>

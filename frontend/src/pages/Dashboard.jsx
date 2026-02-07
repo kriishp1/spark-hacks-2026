@@ -1,13 +1,57 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, X, Home, BarChart2, Settings, Users, FileText, Bell, LogOut } from 'lucide-react';
 import { supabase } from '../supaBaseClient';
 import { useNavigate } from 'react-router-dom';
+import ReceiptCard from '../componets/ReceiptCard';
 
 const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activePage, setActivePage] = useState('home');
+  const [userEmail, setUserEmail] = useState("");
+  const [userName, setUserName] = useState("");
   const navigate = useNavigate();
+  const [receipts, setReceipts] = useState([
+    {
+      id: 1,
+      svg: '', // You can put SVG markup here or leave blank for default
+      purchaseDate: '2026-02-01',
+      storeName: 'SuperMart',
+      items: [
+        { name: 'Milk', cost: 3.49 },
+        { name: 'Bread', cost: 2.29 },
+        { name: 'Eggs', cost: 4.19 },
+      ],
+      totalPrice: 9.97,
+      returnPolicy: '30 days with receipt',
+      expiryDate: '2026-03-02',
+    },
+    {
+      id: 2,
+      svg: '',
+      purchaseDate: '2026-01-15',
+      storeName: 'TechStore',
+      items: [
+        { name: 'USB Cable', cost: 7.99 },
+        { name: 'Charger', cost: 19.99 },
+      ],
+      totalPrice: 27.98,
+      returnPolicy: '14 days, unopened',
+      expiryDate: '2026-01-29',
+    },
+  ]);
+
+  useEffect(() => {
+    async function fetchUser() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        setUserEmail(user.email || "");
+        // Try to get username from user_metadata or fallback to email prefix
+        setUserName(user.user_metadata?.username || user.email?.split("@")[0] || "User");
+      }
+    }
+    fetchUser();
+  }, []);
 
   const pages = [
     { id: 'home', name: 'Home', icon: Home },
@@ -26,6 +70,10 @@ const Dashboard = () => {
     } catch (error) {
       console.error('Logout failed:', error);
     }
+  };
+
+  const handleDeleteReceipt = (id) => {
+    setReceipts((prev) => prev.filter((r) => r.id !== id));
   };
 
   function getReceipts(){
@@ -84,6 +132,28 @@ const Dashboard = () => {
             </h1>
             <div className="p-6 rounded-lg shadow-md" style={{ backgroundColor: '#E8E2D8' }}>
               <p className="text-gray-700">User management content goes here.</p>
+            </div>
+          </div>
+        );
+      case 'receipt':
+        return (
+          <div>
+            <h1 className="text-3xl font-bold mb-6" style={{ color: '#6F8F72' }}>
+              My Receipts
+            </h1>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-h-[70vh] overflow-y-auto p-2">
+              {/* Example usage of ReceiptCard for each receipt */}
+              {receipts.length > 0 ? (
+                receipts.map((receipt) => (
+                  <ReceiptCard
+                    key={receipt.id}
+                    receipt={receipt}
+                    onDelete={() => handleDeleteReceipt(receipt.id)}
+                  />
+                ))
+              ) : (
+                <p className="text-gray-700">No receipts to show.</p>
+              )}
             </div>
           </div>
         );
@@ -155,13 +225,9 @@ const Dashboard = () => {
         {/* Sidebar Footer */}
         <div className="p-4 border-t border-white border-opacity-20">
           <div className={`flex items-center ${!sidebarOpen && 'justify-center'}`}>
-            <div className="w-10 h-10 rounded-full bg-white bg-opacity-20 flex items-center justify-center text-white font-semibold">
-              U
-            </div>
             {sidebarOpen && (
-              <div className="ml-3 text-white">
-                <p className="font-medium">User Name</p>
-                <p className="text-sm opacity-75">user@example.com</p>
+              <div className="text-white">
+                <p className="text-sm opacity-75">{userEmail || 'user@example.com'}</p>
               </div>
             )}
           </div>
@@ -241,12 +307,8 @@ const Dashboard = () => {
             </nav>
             <div className="p-4 border-t border-white border-opacity-20">
               <div className="flex items-center">
-                <div className="w-10 h-10 rounded-full bg-white bg-opacity-20 flex items-center justify-center text-white font-semibold">
-                  U
-                </div>
-                <div className="ml-3 text-white">
-                  <p className="font-medium">User Name</p>
-                  <p className="text-sm opacity-75">user@example.com</p>
+                <div className="text-white">
+                  <p className="text-sm opacity-75">{userEmail || 'user@example.com'}</p>
                 </div>
               </div>
             </div>
