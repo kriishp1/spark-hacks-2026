@@ -17,18 +17,21 @@ function Landing() {
             <a href="#what-we-do" className="text-lg text-[#6F8F72] pt-1.5">
               What We Do
             </a>
-            <button
-              onClick={() => alert("Sign Up Clicked!")}
-              className="px-4 py-2 bg-[#6F8F72] text-[#F9F5F0] rounded-lg transition cursor-pointer hover:opacity-90"
-            >
-              Sign UP
+            <Link to="/signup">
+              <button
+                className="px-4 py-2 bg-[#6F8F72] text-[#F9F5F0] rounded-lg transition cursor-pointer hover:opacity-90"
+              >
+                Sign UP
             </button>
+            </Link>
+            <Link to="/login">
             <button
-              onClick={() => alert("Sign In Clicked!")}
+              //onClick={() => alert("Sign In Clicked!")}
               className="px-4 py-2 bg-[#6F8F72] text-[#F9F5F0] rounded-lg transition cursor-pointer hover:opacity-90"
             >
               Sign IN
             </button>
+            </Link>
           </div>
         </div>
       </nav>
