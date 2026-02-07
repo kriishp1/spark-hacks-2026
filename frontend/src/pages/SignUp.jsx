@@ -3,6 +3,7 @@ import { supabase } from "../supaBaseClient";
 import { useNavigate } from "react-router-dom";
 
 export default function SignUp() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -12,16 +13,23 @@ export default function SignUp() {
     event.preventDefault();
     setMessage("");
 
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password
-    });
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password
+      });
 
-    if(error) {
-      setMessage(error.message);
-    } else {
-      setMessage("Check your email for confirmation link!");
+      if (error) {
+        setMessage(error.message);
+      } else {
+        setMessage("Check your email for confirmation link!");
+      }
+
+    } catch (error) {
+      console.error("Network error:", error);
+      setMessage("Network error. Please try again.");
     }
+    
 
   }
   return (
