@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useState } from 'react'
 import { supabase } from "./supaBaseClient";
 import { useNavigate } from "react-router-dom";
@@ -71,3 +72,12 @@ export default function Login() {
     </div>
   )
 }
+=======
+import './index.css'
+
+function SignUp() {
+
+}
+
+export default SignUp
+>>>>>>> 2884ced3069337e7d529f48cbbf00c8c6399ab92
