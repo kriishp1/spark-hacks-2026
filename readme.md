@@ -51,57 +51,7 @@ Americans leave hundreds of dollars on the table each year through:
 
 ## 🚀 Getting Started
 
-### Prerequisites
-
-- Node.js (v16 or higher)
-- npm or yarn
-- Supabase account
-- Google Cloud account (for authentication)
-- Anthropic API key (for Claude AI)
-
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/yourusername/parsley.git
-   cd parsley
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Set up environment variables**
-   
-   Create a `.env` file in the root directory:
-   ```env
-   SUPABASE_URL=your_supabase_url
-   SUPABASE_ANON_KEY=your_supabase_anon_key
-   GOOGLE_CLIENT_ID=your_google_client_id
-   GOOGLE_CLIENT_SECRET=your_google_client_secret
-   ANTHROPIC_API_KEY=your_anthropic_api_key
-   ```
-
-4. **Run the development server**
-   ```bash
-   npm run dev
-   ```
-
-5. **Open your browser**
-   
-   Navigate to `http://localhost:5173` to see Parsley in action!
-
----
-
-## 📱 How It Works
-
-1. **Snap** - Take a photo of your receipt after any purchase
-2. **Scan** - Claude AI automatically extracts product details, prices, and deadlines
-3. **Relax** - We track everything and send you a text reminder before deadlines expire
-4. **Act** - Get your money back while you still can
-
----
+Access our project here: <https://spark-hacks-2026.vercel.app>
 
 ## 🎯 Roadmap
 
