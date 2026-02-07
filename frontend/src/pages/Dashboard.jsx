@@ -24,7 +24,7 @@ const Dashboard = () => {
               {[1, 2, 3, 4, 5, 6].map((item) => (
                 <div
                   key={item}
-                  className="p-6 rounded-lg shadow-md"
+                  className="p-6 rounded-lg shadow-md cursor-pointer hover:shadow-lg transition-shadow"
                   style={{ backgroundColor: '#E8E2D8' }}
                 >
                   <h3 className="text-xl font-semibold mb-2">Card {item}</h3>
@@ -149,7 +149,7 @@ const Dashboard = () => {
       <div className="flex-1 overflow-auto">
         {/* Top Bar */}
         <div
-          className="shadow-sm p-4 flex items-center justify-between"
+          className="shadow-md p-4 flex items-center justify-between"
           style={{ backgroundColor: '#E8E2D8' }}
         >
           <h2 className="text-xl font-semibold text-gray-800">
