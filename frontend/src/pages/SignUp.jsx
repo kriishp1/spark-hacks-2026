@@ -60,7 +60,7 @@ export default function SignUp() {
               className="w-full px-4 py-2 border-2 rounded-lg focus:outline-none focus:border-[#6F8F72]"
               style={{ borderColor: "#E8E2D8" }}
               required
-              
+
             />
           </div>
 
@@ -77,7 +77,7 @@ export default function SignUp() {
               style={{ borderColor: "#E8E2D8" }}
               required
             />
-            
+
           </div>
 
           <button
@@ -90,11 +90,10 @@ export default function SignUp() {
         </form>
 
         {message && (
-          <div className={`mt-4 p-3 rounded-lg text-center text-sm ${
-            message.includes('Error') || message.includes('Network') 
-              ? 'bg-red-100 text-red-700 border border-red-300' 
+          <div className={`mt-4 p-3 rounded-lg text-center text-sm ${message.includes('Error') || message.includes('Network')
+              ? 'bg-red-100 text-red-700 border border-red-300'
               : 'bg-green-100 text-green-700 border border-green-300'
-          }`}>
+            }`}>
             {message}
           </div>
         )}
