@@ -24,7 +24,7 @@ export default function Login() {
                 setMessage(error.message);
             } else {
                 setMessage("You can Sign In");
-                navigate("/Dashboard");
+                navigate("/dashboard");
             }
 
 
