@@ -16,7 +16,10 @@ export default function SignUp() {
     try {
       const { data, error } = await supabase.auth.signUp({
         email,
-        password
+        password,
+        options: {
+          emailRedirectTo: "http://localhost:5173/login"
+        }
       });
 
       if (error) {
@@ -25,11 +28,17 @@ export default function SignUp() {
         setMessage("Check your email for confirmation link!");
       }
 
+      if (data.user && data.user.confirmed_at) {
+        setTimeout(() => {
+          navigate("/Login");
+        }, (2000));
+      }
+
     } catch (error) {
       console.error("Network error:", error);
       setMessage("Network error. Please try again.");
     }
-    
+
 
   }
   return (
