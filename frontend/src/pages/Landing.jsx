@@ -25,12 +25,13 @@ function Landing() {
                     About Us
                     <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#6F8F72] group-hover:w-full transition-all duration-300"></span>
                   </a>
-                  <button className="px-6 py-2.5 text-[#6F8F72] font-medium hover:bg-gray-100 rounded-full transition-all">
+                  <Link to="/login" className="px-6 py-2.5 text-[#6F8F72] font-medium hover:bg-gray-100 rounded-full transition-all">
                     Login
-                  </button>
-                  <button className="px-6 py-2.5 bg-gradient-to-r from-[#6F8F72] to-[#5c7c60] text-white font-medium rounded-full shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all">
+                  </Link>
+
+                  <Link to="/signup" className="px-6 py-2.5 bg-gradient-to-r from-[#6F8F72] to-[#5c7c60] text-white font-medium rounded-full shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all">
                     Sign Up
-                  </button>
+                  </Link>
             </div>
           </div>
         </nav>
@@ -88,9 +89,9 @@ function Landing() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 3, duration: 0.6 }}
           >
-            <button className="px-8 py-4 bg-gradient-to-r from-[#6F8F72] to-[#5c7c60] text-white text-lg font-semibold rounded-2xl shadow-2xl hover:shadow-3xl transform hover:-translate-y-1 transition-all">
+            <Link to="/signup" className="px-8 py-4 bg-gradient-to-r from-[#6F8F72] to-[#5c7c60] text-white text-lg font-semibold rounded-2xl shadow-2xl hover:shadow-3xl transform hover:-translate-y-1 transition-all">
               Get Started Free
-            </button>
+            </Link>
             <button className="px-8 py-4 bg-white/80 backdrop-blur text-[#6F8F72] text-lg font-semibold rounded-2xl border-2 border-[#6F8F72]/20 hover:border-[#6F8F72] transition-all">
               Watch Demo
             </button>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { supabase } from "../supaBaseClient";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -82,10 +82,11 @@ export default function SignUp() {
 
           <button
             type="submit"
+            onSubmit={handleSignUp}
             className="w-full py-2 rounded-lg font-semibold text-white transition cursor-pointer hover:opacity-90"
             style={{ backgroundColor: "#6F8F72" }}
           >
-            Sign In
+            Sign Up
           </button>
         </form>
 
@@ -100,13 +101,13 @@ export default function SignUp() {
 
         <p className="text-center text-gray-600 text-sm mt-6">
           Have an account?{" "}
-          <a
-            href="/login"
+          <Link
+            to="/login"
             style={{ color: "#6F8F72" }}
             className="font-semibold hover:underline"
           >
             Login
-          </a>
+          </Link>
         </p>
       </div>
     </div>

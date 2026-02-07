@@ -4,6 +4,8 @@ import Landing from './pages/Landing.jsx'
 import Login from './pages/Login.jsx'
 import Dashboard from './pages/Dashboard.jsx'
 import AboutUs from './pages/Aboutme.jsx'
+import ForgotPassword from './pages/ForgotPassword.jsx'
+import NewPassword from './pages/NewPassword.jsx'
 import {Routes, Route} from 'react-router-dom'
 import { motion } from "motion/react"
 import InsertPage from './pages/InsertPage.jsx'
@@ -16,6 +18,8 @@ function App() {
       <Route path="/" element={<Landing />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/new-password" element={<NewPassword />} />
       <Route path="/homepage" element={<Landing />} />
 
       <Route path="/dashboard" element={
@@ -31,7 +35,16 @@ function App() {
           </Wrapper>
           } 
       />
+
+      <Route path="/new-password" element={
+          <Wrapper>
+            <NewPassword/> 
+          </Wrapper>
+          } 
+      />
     </Routes>
+
+    
   ) 
 }
 

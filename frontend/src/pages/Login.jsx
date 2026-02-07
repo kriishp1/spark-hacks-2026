@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "../supaBaseClient"
 import { useState } from "react"
 
@@ -69,9 +69,9 @@ export default function Login() {
                             style={{ borderColor: '#E8E2D8' }}
                         />
                         <div className="text-right mt-2">
-                            <a href="#" style={{ color: '#6F8F72' }} className="text-sm font-semibold hover:underline">
+                            <Link to="/forgot-password" style={{ color: '#6F8F72' }} className="text-sm font-semibold hover:underline">
                                 Forgot password?
-                            </a>
+                            </Link>
                         </div>
                     </div>
 
@@ -95,9 +95,9 @@ export default function Login() {
 
                 <p className="text-center text-gray-600 text-sm mt-6">
                     Don't have an account?{' '}
-                    <a href="#" style={{ color: '#6F8F72' }} className="font-semibold hover:underline">
+                    <Link to="/signup" style={{ color: '#6F8F72' }} className="font-semibold hover:underline">
                         Sign up
-                    </a>
+                    </Link>
                 </p>
             </div>
         </div>
