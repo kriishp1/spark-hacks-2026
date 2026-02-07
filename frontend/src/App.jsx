@@ -13,13 +13,9 @@ function App() {
       <Route path="/" element={<Landing />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/Landing" element={<Landing />} />
-<<<<<<< HEAD
-      <Route path="/Dashboard" element={<Dashboard/>}/>
-      <Route path="/AddReceipt" element={<InsertPage/>}/>
-=======
-      <Route path="/Dashboard" element={<Dashboard />}/>"
->>>>>>> dbf31860e8bb0a801a68ae5bbb6ac0137b75baa9
+      <Route path="/landing" element={<Landing />} />
+      <Route path="/dashboard" element={<Dashboard/>}/>
+      <Route path="/addreceipt" element={<InsertPage/>}/>
     </Routes>
   ) 
 }

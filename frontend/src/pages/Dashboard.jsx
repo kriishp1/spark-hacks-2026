@@ -4,6 +4,7 @@ import { Menu, X, Home, BarChart2, Settings, Users, FileText, Bell } from 'lucid
 const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activePage, setActivePage] = useState('home');
+  
 ``
   const pages = [
     { id: 'home', name: 'Home', icon: Home },
@@ -11,9 +12,6 @@ const Dashboard = () => {
     { id: 'settings', name: 'Settings', icon: Settings },
   ];
 
-  function getReceipts(){
-
-  }
 
   // Sample content for different pages
   const renderContent = () => {
@@ -57,7 +55,7 @@ const Dashboard = () => {
             </div>
           </div>
         );
-      case 'users':
+      case 'settings':
         return (
           <div>
             <h1 className="text-3xl font-bold mb-6" style={{ color: '#6F8F72' }}>
@@ -83,12 +81,12 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-50">
-      {/* Sidebar */}
+    <div className="flex flex-col md:flex-row h-screen bg-gray-50">
+      {/* Desktop Sidebar */}
       <div
-        className={`${
+        className={`hidden md:flex ${
           sidebarOpen ? 'w-64' : 'w-20'
-        } transition-all duration-300 shadow-lg flex flex-col`}
+        } transition-all duration-300 shadow-lg flex-col`}
         style={{ backgroundColor: '#6F8F72' }}
       >
         {/* Sidebar Header */}
@@ -102,7 +100,7 @@ const Dashboard = () => {
           </h2>
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="text-black hover:bg-white hover:bg-opacity-20 p-2 rounded transition-colors"
+            className="text-white hover:bg-white hover:bg-opacity-20 p-2 rounded transition-colors"
           >
             {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -136,7 +134,7 @@ const Dashboard = () => {
         {/* Sidebar Footer */}
         <div className="p-4 border-t border-white border-opacity-20">
           <div className={`flex items-center ${!sidebarOpen && 'justify-center'}`}>
-            <div className="w-10 h-10 rounded-full bg-white bg-opacity-20 flex items-center justify-center text-white font-semibold ">
+            <div className="w-10 h-10 rounded-full bg-white bg-opacity-20 flex items-center justify-center text-white font-semibold">
               U
             </div>
             {sidebarOpen && (
@@ -150,25 +148,77 @@ const Dashboard = () => {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 overflow-auto">
-        {/* Top Bar */}
+      <div className="flex-1 flex flex-col overflow-auto">
+        {/* Mobile & Desktop Top Bar */}
         <div
           className="shadow-sm p-4 flex items-center justify-between"
           style={{ backgroundColor: '#E8E2D8' }}
         >
-          <h2 className="text-xl font-semibold text-gray-800">
-            {pages.find(p => p.id === activePage)?.name}
-          </h2>
+          <div className="flex items-center gap-3">
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="md:hidden p-2 rounded transition-colors -translate-y-0"
+              style={{ color: '#6F8F72' }}
+            >
+              <Menu size={24} />
+            </button>
+            <h2 className="text-xl font-semibold text-gray-800 translate-y-[2px]">
+              {pages.find(p => p.id === activePage)?.name}
+            </h2>
+          </div>
           <button
-            className="px-4 py-2 rounded text-white hover:opacity-90 transition-opacity"
+            className="px-4 py-2 rounded text-white hover:opacity-90 transition-opacity text-sm md:text-base translate-y-[2px]"
             style={{ backgroundColor: '#6F8F72' }}
           >
             Enter New Receipt
           </button>
         </div>
 
+        {/* Mobile Dropdown Menu */}
+        {sidebarOpen && (
+          <div
+            className="md:hidden shadow-lg flex flex-col"
+            style={{ backgroundColor: '#6F8F72' }}
+          >
+            <nav className="px-2 py-4">
+              {pages.map((page) => {
+                const Icon = page.icon;
+                return (
+                  <button
+                    key={page.id}
+                    onClick={() => {
+                      setActivePage(page.id);
+                      setSidebarOpen(false);
+                    }}
+                    className={`w-full flex items-center px-4 py-3 mb-2 rounded-lg transition-all cursor-pointer ${
+                      activePage === page.id
+                        ? 'bg-gray-600 bg-opacity-40 text-white'
+                        : 'text-white hover:opacity-90'
+                    }`}
+                  >
+                    <Icon size={20} />
+                    <span className="ml-3">{page.name}</span>
+                  </button>
+                );
+              })}
+            </nav>
+            <div className="p-4 border-t border-white border-opacity-20">
+              <div className="flex items-center">
+                <div className="w-10 h-10 rounded-full bg-white bg-opacity-20 flex items-center justify-center text-white font-semibold">
+                  U
+                </div>
+                <div className="ml-3 text-white">
+                  <p className="font-medium">User Name</p>
+                  <p className="text-sm opacity-75">user@example.com</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Page Content */}
-        <div className="p-6">
+        <div className="p-4 md:p-6 flex-1">
           {renderContent()}
         </div>
       </div>

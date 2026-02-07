@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 export default function InsertPage() {
     const navigate = useNavigate();
     
+    
+    
     const [isCameraActive, setIsCameraActive] = useState(false);
     const [capturedImage, setCapturedImage] = useState(null);
     const [stream, setStream] = useState(null);
