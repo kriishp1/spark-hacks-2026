@@ -14,6 +14,9 @@ app.get("/", (req, res) => {
   res.json({ message: "Backend is running" });
 });
 
+app.get("/api/login", loginRoutes);
+
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
